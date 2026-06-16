@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CropCast AI — Farming Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-leaf">🌾</span>
+        <span class="logo-text">CropCast <em>AI</em></span>
+      </div>
+      <p class="header-tagline">Weather-informed farming decisions for Tamil Nadu</p>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-title">What should you grow <br><em>this month?</em></h1>
+      <p class="hero-sub">Select a month to get predicted weather conditions, recommended crops, and cultivation materials tailored for the season.</p>
+    </div>
+  </section>
+
+  <!-- Month Selector -->
+  <section class="month-selector-section">
+    <div class="container">
+      <p class="section-label">Select a month</p>
+      <div class="month-grid" id="monthGrid">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section class="results-section" id="resultsSection" style="display:none">
+    <div class="container">
+
+      <!-- Month Title -->
+      <div class="result-header">
+        <div>
+          <p class="section-label" id="resultSeason"></p>
+          <h2 class="result-month" id="resultMonth"></h2>
+        </div>
+        <div class="result-tip-box" id="resultTip"></div>
+      </div>
+
+      <!-- Weather Cards -->
+      <div class="cards-row">
+        <div class="weather-card" id="cardTemp">
+          <div class="card-icon">🌡️</div>
+          <div class="card-label">Temperature</div>
+          <div class="card-value" id="wTemp">—</div>
+          <div class="card-sub" id="wTempRange">—</div>
+        </div>
+        <div class="weather-card" id="cardRain">
+          <div class="card-icon">🌧️</div>
+          <div class="card-label">Rainfall</div>
+          <div class="card-value" id="wRain">—</div>
+          <div class="card-sub">expected mm</div>
+        </div>
+        <div class="weather-card" id="cardHumidity">
+          <div class="card-icon">💧</div>
+          <div class="card-label">Humidity</div>
+          <div class="card-value" id="wHumidity">—</div>
+          <div class="card-sub">relative %</div>
+        </div>
+        <div class="weather-card" id="cardWind">
+          <div class="card-icon">💨</div>
+          <div class="card-label">Wind Speed</div>
+          <div class="card-value" id="wWind">—</div>
+          <div class="card-sub">km/h avg</div>
+        </div>
+      </div>
+
+      <!-- Crops + Materials -->
+      <div class="info-grid">
+
+        <!-- Recommended Crops -->
+        <div class="info-card green">
+          <div class="info-card-header">
+            <span class="info-icon">✅</span>
+            <h3>Recommended Crops</h3>
+          </div>
+          <ul class="crop-list" id="cropList"></ul>
+        </div>
+
+        <!-- Crops to Avoid -->
+        <div class="info-card red">
+          <div class="info-card-header">
+            <span class="info-icon">⚠️</span>
+            <h3>Crops to Avoid</h3>
+          </div>
+          <ul class="crop-list" id="avoidList"></ul>
+        </div>
+
+        <!-- Materials -->
+        <div class="info-card blue full-width">
+          <div class="info-card-header">
+            <span class="info-icon">🧰</span>
+            <h3>Cultivation Materials</h3>
+          </div>
+          <div class="materials-grid" id="materialsList"></div>
+        </div>
+
+      </div>
+
+      <!-- Yearly Chart -->
+      <div class="chart-section">
+        <p class="section-label">Annual overview</p>
+        <h3 class="chart-title">Monthly Weather Trends</h3>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-metric="rainfall">Rainfall</button>
+          <button class="chart-tab" data-metric="temp_avg">Temperature</button>
+          <button class="chart-tab" data-metric="humidity">Humidity</button>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="yearlyChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>CropCast AI — Built for Tamil Nadu farmers. Predictions based on historical climate patterns.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
