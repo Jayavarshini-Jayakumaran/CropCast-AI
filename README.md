@@ -58,7 +58,7 @@ Open your browser at **http://localhost:5000**
 
 ## Environment Variables
 
-Create a `.env` file for any API keys (never commit this file):
+Create a `.env` file for any API keys:
 
 ```
 OPENWEATHER_API_KEY=your_key_here
@@ -66,6 +66,8 @@ OPENWEATHER_API_KEY=your_key_here
 
 ---
 
-## License
+🙌 **Connect** — [LinkedIn: Jayavarshini Jayakumaran](https://www.linkedin.com/in/jayavarshini-jayakumaran)
 
-MIT License — see [LICENSE](LICENSE)
+📄 **License** — [MIT](LICENSE)
+
+<p align="center"><b>Finish what you started 💻 </b></p>
