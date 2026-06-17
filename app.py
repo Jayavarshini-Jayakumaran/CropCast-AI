@@ -1,14 +1,13 @@
 from flask import Flask, render_template, jsonify, request
-import sys
-import os
+import sys, os
 
 sys.path.insert(0, os.path.dirname(__file__))
 from data.crop_data import (
     get_weather_prediction,
+    get_crop_recommendations,
     get_all_monthly_data,
-    CROP_RECOMMENDATIONS,
-    CULTIVATION_MATERIALS,
     MONTH_NAMES,
+    _MATERIALS,
 )
 
 app = Flask(__name__)
@@ -24,25 +23,27 @@ def predict(month):
     if month < 1 or month > 12:
         return jsonify({"error": "Month must be between 1 and 12"}), 400
 
-    weather = get_weather_prediction(month)
-    crops = CROP_RECOMMENDATIONS[month]
-    materials = CULTIVATION_MATERIALS[month]
+    year    = request.args.get("year", 2025, type=int)
+    weather = get_weather_prediction(month, year)
+    crops   = get_crop_recommendations(month, year)
 
     return jsonify({
-        "weather": weather,
+        "weather":  weather,
         "crops": {
-            "recommended": crops["crops"],
-            "avoid": crops["avoid"],
-            "tip": crops["tip"],
+            "recommended":      crops["crops"],
+            "recommended_conf": crops["crops_with_conf"],  # includes % confidence
+            "avoid":            crops["avoid"],
+            "tip":              crops["tip"],
+            "model_used":       crops["model_used"],
         },
-        "materials": materials,
+        "materials": _MATERIALS[month],
     })
 
 
 @app.route("/api/yearly")
 def yearly():
-    data = get_all_monthly_data()
-    return jsonify(data)
+    year = request.args.get("year", 2025, type=int)
+    return jsonify(get_all_monthly_data(year))
 
 
 @app.route("/api/months")
