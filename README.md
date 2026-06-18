@@ -2,7 +2,7 @@
 
 > ML-powered farming decisions for any location on Earth — backed by 33 years of NASA satellite data.
 
-CropCast AI fetches real historical weather from the NASA POWER API, trains location-aware weather regressors, and runs a Random Forest crop classifier to recommend what to grow — for any lat/lon on the planet. Users pick a location on an interactive map, select a month (5 past → now → 5 future), and instantly see predicted weather, ML crop recommendations with confidence scores, and cultivation materials.
+CropCast AI fetches real historical weather from the NASA POWER API, trains location-aware weather regressors, and runs a Random Forest crop classifier to recommend what to grow - for any lat/lon on the planet. Users pick a location on an interactive map, select a month (5 past → now → 5 future), and instantly see predicted weather, ML crop recommendations with confidence scores, and cultivation materials.
 
 ---
 
