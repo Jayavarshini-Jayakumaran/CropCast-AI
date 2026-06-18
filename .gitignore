@@ -1,4 +1,4 @@
-# ── Environment ──
+# Environment
 .env
 venv/
 venv_new/
@@ -7,23 +7,26 @@ __pycache__/
 *.pyc
 *.pyo
 
-# ── IDE ──
+# IDE
 .vscode/
 .idea/
 
-# ── OS ──
+# OS
 .DS_Store
 Thumbs.db
 
-# ── Flask ──
+# Flask
 instance/
 *.sqlite
 
-# ── ML Models (large binary files — regenerate with train_model.py) ──
+# ML Models (large binary files — regenerate with train_model.py)
 models/*.pkl
 
-# ── NASA weather CSVs (regenerate with fetch_nasa_data.py) ──
+# NASA weather CSVs (regenerate with fetch_nasa_data.py)
 data/nasa_weather_*.csv
 
-# ── Kaggle dataset (download separately — see README) ──
+# Kaggle dataset (download separately — see README)
 data/crop_recommendation.csv
+
+# Demo video
+assets/Demo_original.mp4
