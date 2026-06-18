@@ -8,17 +8,7 @@ CropCast AI fetches real historical weather from the NASA POWER API, trains loca
 
 ## 🎬 Demo
 
-<!-- After recording, upload your demo video to YouTube/LinkedIn and replace the link below -->
-
-[![CropCast AI Demo](https://img.shields.io/badge/▶_Watch_Demo-YouTube-red?style=for-the-badge&logo=youtube)](https://youtube.com/your-demo-link-here)
-
-> **How to record:** Open the app → change location to Chennai → click a forecast month → screen record the full flow including the NASA fetch + retrain animation.
-> Then upload to YouTube, copy the link, and replace `your-demo-link-here` above.
-
-If you prefer a GIF, tools like [ScreenToGif](https://www.screentogif.com/) (Windows, free) work well — record 30–60 seconds and drop the `.gif` file into your repo, then replace the badge above with:
-```md
-![CropCast AI Demo](demo.gif)
-```
+https://github.com/Jayavarshini-Jayakumaran/CropCast-AI/assets/Demo.mp4
 
 ---
 
@@ -48,6 +38,9 @@ CropCast-AI/
 ├── fetch_nasa_data.py            # Fetch NASA POWER satellite data for any lat/lon
 ├── requirements.txt
 ├── .gitignore
+│
+├── assets/
+│   └── Demo.mp4                  # Demo video
 │
 ├── data/
 │   ├── crop_data.py              # ML inference engine (location-aware)
