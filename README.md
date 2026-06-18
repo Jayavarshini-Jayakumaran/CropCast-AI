@@ -10,6 +10,8 @@ CropCast AI fetches real historical weather from the NASA POWER API, trains loca
 
 [![Watch the demo](https://img.youtube.com/vi/yDoEe3SwLew/maxresdefault.jpg)](https://youtu.be/yDoEe3SwLew)
 
+[![Watch Now](https://img.shields.io/badge/▶_Watch_Now-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/yDoEe3SwLew)
+
 ---
 
 ## ✨ Features
