@@ -1,78 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CropCast AI — Farming Intelligence</title>
+  <title>CropCast AI — Global Farming Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- ── Header ── -->
   <header class="header">
     <div class="header-inner">
       <div class="logo">
         <span class="logo-leaf">🌾</span>
         <span class="logo-text">CropCast <em>AI</em></span>
       </div>
-      <p class="header-tagline">Weather-informed farming decisions for Tamil Nadu</p>
+      <p class="header-tagline">ML-powered farming decisions · Any location on Earth</p>
+      <!-- Active location pill -->
+      <div class="loc-pill" id="locPill">
+        <span class="loc-dot"></span>
+        <span id="locPillText">Coimbatore, India</span>
+        <button class="loc-change-btn" onclick="openLocationPanel()">Change</button>
+      </div>
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- ── Location Panel (modal overlay) ── -->
+  <div class="loc-overlay" id="locOverlay" style="display:none">
+    <div class="loc-panel">
+      <div class="loc-panel-header">
+        <h2>Choose a Location</h2>
+        <button class="loc-close" onclick="closeLocationPanel()">✕</button>
+      </div>
+
+      <!-- Search bar -->
+      <div class="loc-search-row">
+        <input type="text" id="locSearch" placeholder="Search city or place..." class="loc-input"/>
+        <button class="loc-search-btn" onclick="searchLocation()">Search</button>
+        <button class="loc-gps-btn" onclick="useGPS()" title="Use my location">📍 GPS</button>
+      </div>
+
+      <!-- Map -->
+      <div id="locationMap" class="loc-map"></div>
+
+      <div class="loc-coords" id="locCoords">
+        Click the map or search to pick a location
+      </div>
+
+      <!-- Presets -->
+      <div class="loc-presets">
+        <p class="section-label">Quick picks</p>
+        <div class="preset-grid">
+          <button class="preset-btn" onclick="setPreset(11.00,76.95,'Coimbatore, India')">🇮🇳 Coimbatore</button>
+          <button class="preset-btn" onclick="setPreset(13.08,80.27,'Chennai, India')">🇮🇳 Chennai</button>
+          <button class="preset-btn" onclick="setPreset(28.61,77.20,'Delhi, India')">🇮🇳 Delhi</button>
+          <button class="preset-btn" onclick="setPreset(19.07,72.87,'Mumbai, India')">🇮🇳 Mumbai</button>
+          <button class="preset-btn" onclick="setPreset(1.35,103.82,'Singapore')">🇸🇬 Singapore</button>
+          <button class="preset-btn" onclick="setPreset(35.68,139.69,'Tokyo, Japan')">🇯🇵 Tokyo</button>
+          <button class="preset-btn" onclick="setPreset(-1.29,36.82,'Nairobi, Kenya')">🇰🇪 Nairobi</button>
+          <button class="preset-btn" onclick="setPreset(40.71,-74.00,'New York, USA')">🇺🇸 New York</button>
+        </div>
+      </div>
+
+      <button class="loc-confirm-btn" id="locConfirmBtn" onclick="confirmLocation()" disabled>
+        Fetch NASA Data &amp; Retrain Model →
+      </button>
+      <p class="loc-note">Takes ~10 seconds · NASA POWER satellite data · Free</p>
+    </div>
+  </div>
+
+  <!-- ── Loading overlay (while fetching + retraining) ── -->
+  <div class="retrain-overlay" id="retrainOverlay" style="display:none">
+    <div class="retrain-box">
+      <div class="retrain-spinner"></div>
+      <h3 id="retrainTitle">Fetching NASA data...</h3>
+      <p id="retrainSub">Pulling 33 years of satellite weather for your location</p>
+      <div class="retrain-steps">
+        <div class="rstep" id="rs1">🛰️ NASA POWER API call</div>
+        <div class="rstep" id="rs2">📊 Building training dataset</div>
+        <div class="rstep" id="rs3">🤖 Retraining weather models</div>
+        <div class="rstep" id="rs4">✅ Ready</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Hero ── -->
   <section class="hero">
     <div class="hero-inner">
       <h1 class="hero-title">What should you grow <br><em>this month?</em></h1>
-      <p class="hero-sub">Select a month to get predicted weather conditions, recommended crops, and cultivation materials tailored for the season.</p>
+      <p class="hero-sub">Pick any location on Earth. We fetch 33 years of NASA satellite data, retrain the weather model, and give you ML-powered crop recommendations for your exact climate.</p>
     </div>
   </section>
 
-  <!-- Month Selector -->
+  <!-- ── Month Selector ── -->
   <section class="month-selector-section">
     <div class="container">
-      <p class="section-label">Select a month</p>
-      <div class="month-grid" id="monthGrid">
-        <!-- Filled by JS -->
+      <p class="section-label">Select a month · 5 past &nbsp;|&nbsp; now &nbsp;|&nbsp; 5 future</p>
+      <div class="month-grid" id="monthGrid"></div>
+      <div class="legend">
+        <span class="leg-item"><span class="m-badge past">PAST</span> Historical</span>
+        <span class="leg-item"><span class="m-badge now">NOW</span> Current</span>
+        <span class="leg-item"><span class="m-badge future">FCST</span> ML Forecast</span>
+        <span class="leg-item" id="dataSourceBadge"></span>
       </div>
     </div>
   </section>
 
-  <!-- Results Section -->
+  <!-- ── Results ── -->
   <section class="results-section" id="resultsSection" style="display:none">
     <div class="container">
 
-      <!-- Month Title -->
       <div class="result-header">
         <div>
           <p class="section-label" id="resultSeason"></p>
           <h2 class="result-month" id="resultMonth"></h2>
+          <p class="result-location" id="resultLocation"></p>
         </div>
         <div class="result-tip-box" id="resultTip"></div>
       </div>
 
-      <!-- Weather Cards -->
       <div class="cards-row">
-        <div class="weather-card" id="cardTemp">
+        <div class="weather-card">
           <div class="card-icon">🌡️</div>
           <div class="card-label">Temperature</div>
           <div class="card-value" id="wTemp">—</div>
           <div class="card-sub" id="wTempRange">—</div>
         </div>
-        <div class="weather-card" id="cardRain">
+        <div class="weather-card">
           <div class="card-icon">🌧️</div>
           <div class="card-label">Rainfall</div>
           <div class="card-value" id="wRain">—</div>
           <div class="card-sub">expected mm</div>
         </div>
-        <div class="weather-card" id="cardHumidity">
+        <div class="weather-card">
           <div class="card-icon">💧</div>
           <div class="card-label">Humidity</div>
           <div class="card-value" id="wHumidity">—</div>
           <div class="card-sub">relative %</div>
         </div>
-        <div class="weather-card" id="cardWind">
+        <div class="weather-card">
           <div class="card-icon">💨</div>
           <div class="card-label">Wind Speed</div>
           <div class="card-value" id="wWind">—</div>
@@ -80,19 +149,14 @@
         </div>
       </div>
 
-      <!-- Crops + Materials -->
       <div class="info-grid">
-
-        <!-- Recommended Crops -->
         <div class="info-card green">
           <div class="info-card-header">
             <span class="info-icon">✅</span>
-            <h3>Recommended Crops</h3>
+            <h3>Recommended Crops <span class="ml-tag">ML</span></h3>
           </div>
           <ul class="crop-list" id="cropList"></ul>
         </div>
-
-        <!-- Crops to Avoid -->
         <div class="info-card red">
           <div class="info-card-header">
             <span class="info-icon">⚠️</span>
@@ -100,8 +164,6 @@
           </div>
           <ul class="crop-list" id="avoidList"></ul>
         </div>
-
-        <!-- Materials -->
         <div class="info-card blue full-width">
           <div class="info-card-header">
             <span class="info-icon">🧰</span>
@@ -109,10 +171,8 @@
           </div>
           <div class="materials-grid" id="materialsList"></div>
         </div>
-
       </div>
 
-      <!-- Yearly Chart -->
       <div class="chart-section">
         <p class="section-label">Annual overview</p>
         <h3 class="chart-title">Monthly Weather Trends</h3>
@@ -121,22 +181,21 @@
           <button class="chart-tab" data-metric="temp_avg">Temperature</button>
           <button class="chart-tab" data-metric="humidity">Humidity</button>
         </div>
-        <div class="chart-wrapper">
-          <canvas id="yearlyChart"></canvas>
-        </div>
+        <div class="chart-wrapper"><canvas id="yearlyChart"></canvas></div>
       </div>
 
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>CropCast AI — Built for Tamil Nadu farmers. Predictions based on historical climate patterns.</p>
+      <p>CropCast AI · ML-powered · NASA POWER satellite data · <span id="footerYear"></span></p>
     </div>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="/static/js/app.js"></script>
+  <script>document.getElementById("footerYear").textContent = new Date().getFullYear();</script>
 </body>
 </html>
