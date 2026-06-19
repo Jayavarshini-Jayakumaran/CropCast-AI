@@ -96,7 +96,7 @@ Save as: `data/crop_recommendation.csv`
 
 ### 5. Fetch NASA weather data
 ```bash
-# Default: Coimbatore, Tamil Nadu
+# Default: Coimbatore, Tamil Nadu, India
 python fetch_nasa_data.py
 
 # Any location: python fetch_nasa_data.py <lat> <lon>
