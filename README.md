@@ -178,6 +178,7 @@ Open **http://localhost:5000**
 - **Weather data:** NASA POWER Satellite API (public, no auth)
 
 ---
+
 📧 **Email** - [jayavarshinijayakumaran11@gmail.com](mailto:jayavarshinijayakumaran11@gmail.com)
 
 🙌 **Connect** - [LinkedIn: Jayavarshini Jayakumaran](https://www.linkedin.com/in/jayavarshini-jayakumaran)
